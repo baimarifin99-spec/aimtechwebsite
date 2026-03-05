@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard | Aim Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        body {
+            background-color: var(--color-black);
+            color: var(--color-white);
+            font-family: 'Outfit', sans-serif;
+            margin: 0;
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Sidebar Styles */
+        .admin-sidebar {
+            width: 280px;
+            background-color: var(--color-dark);
+            border-right: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+            padding: 2rem 0;
+        }
+
+        .admin-logo {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .admin-logo h2 {
+            font-size: 2rem;
+            margin: 0;
+            letter-spacing: 2px;
+        }
+
+        .admin-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            padding: 0 1.5rem;
+        }
+
+        .admin-nav-item {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            color: var(--color-gray);
+            cursor: pointer;
+            transition: var(--transition-fast);
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .admin-nav-item:hover,
+        .admin-nav-item.active {
+            background-color: rgba(230, 32, 32, 0.1);
+            color: var(--color-red);
+        }
+
+        .admin-logout {
+            margin-top: auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Main Content Styles */
+        .admin-main {
+            flex: 1;
+            padding: 2rem 3rem;
+            overflow-y: auto;
+            background: linear-gradient(135deg, var(--color-black) 0%, #0a0505 100%);
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 3rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .admin-title h1 {
+            font-size: 2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .admin-title p {
+            color: var(--color-gray);
+            font-size: 0.9rem;
+        }
+
+        .admin-profile {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .profile-pic {
+            width: 45px;
+            height: 45px;
+            background-color: var(--color-red);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+        }
+
+        /* Dashboard specific */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 3rem;
+        }
+
+        .stat-card {
+            background-color: var(--color-dark);
+            padding: 1.5rem;
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .stat-card h3 {
+            color: var(--color-gray);
+            font-size: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .stat-card .value {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-white);
+        }
+
+        .stat-card .trend {
+            margin-top: 0.5rem;
+            font-size: 0.85rem;
+            color: #4cd137;
+            /* green */
+        }
+
+        /* Tables */
+        .admin-section {
+            background-color: var(--color-dark);
+            border-radius: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            display: none;
+        }
+
+        .admin-section.active {
+            display: block;
+        }
+
+        .section-heading {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .section-heading h2 {
+            font-size: 1.5rem;
+            color: var(--color-white);
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .data-table th,
+        .data-table td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .data-table th {
+            color: var(--color-gray);
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.85rem;
+        }
+
+        .data-table tr:hover {
+            background-color: rgba(255, 255, 255, 0.02);
+        }
+
+        .status-badge {
+            padding: 0.3rem 0.8rem;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        .status-pending {
+            background-color: rgba(241, 196, 15, 0.2);
+            color: #f1c40f;
+        }
+
+        .status-confirmed {
+            background-color: rgba(76, 209, 55, 0.2);
+            color: #4cd137;
+        }
+
+        .action-btn {
+            background: none;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            transition: 0.2s;
+        }
+
+        .action-btn:hover {
+            background: var(--color-red);
+            border-color: var(--color-red);
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Sidebar Navigation -->
+    <aside class="admin-sidebar">
+        <div class="admin-logo">
+            <img src="assets/logo.png" alt="Aim Tech Logo" class="logo-img" style="height: 50px; margin-bottom: 10px;">
+            <p style="color: var(--color-gray); font-size: 0.8rem; text-transform: uppercase; letter-spacing: 1px;">
+                Admin Portal</p>
+        </div>
+        <div class="admin-nav">
+            <div class="admin-nav-item active" onclick="switchTab('dashboard')">
+                📊 Dashboard
+            </div>
+            <div class="admin-nav-item" onclick="switchTab('clients')">
+                👥 Client Database
+            </div>
+            <div class="admin-nav-item" onclick="switchTab('packages')">
+                🏷️ Pricing & Packages
+            </div>
+            <div class="admin-nav-item" onclick="switchTab('portfolio')">
+                🖼️ Portfolio Pictures
+            </div>
+            <div class="admin-nav-item" onclick="switchTab('promotions')">
+                🎁 Promotions
+            </div>
+        </div>
+        <div class="admin-logout">
+            <a href="index.html" class="btn btn-primary" style="width: 100%; text-align: center;">Log Out</a>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="admin-main">
+        <header class="admin-header">
+            <div class="admin-title">
+                <h1>Welcome back, Admin</h1>
+                <p>Here is what is happening with Aim Tech today.</p>
+            </div>
+            <div class="admin-profile">
+                <div class="profile-pic">A</div>
+                <div class="profile-name">Admin Account</div>
+            </div>
+        </header>
+
+        <!-- DASHBOARD TAB -->
+        <div id="dashboard" class="admin-section active">
+            <div class="dashboard-grid">
+                <div class="stat-card">
+                    <h3>Total Clients</h3>
+                    <div class="value">142</div>
+                    <div class="trend">↑ 12% from last month</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Pending Bookings</h3>
+                    <div class="value">5</div>
+                    <div class="trend" style="color: #f1c40f;">Follow up required</div>
+                </div>
+                <div class="stat-card">
+                    <h3>Website Views</h3>
+                    <div class="value">2,845</div>
+                    <div class="trend">↑ 24% from last month</div>
+                </div>
+            </div>
+
+            <div class="section-heading">
+                <h2>Recent Booking Inquiries</h2>
+            </div>
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Email</th>
+                        <th>Package</th>
+                        <th>Date</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>CIMB Group</td>
+                        <td>events@cimb.com</td>
+                        <td>Esports Tournament</td>
+                        <td>12 Nov 2026</td>
+                        <td><span class="status-badge status-pending">Pending</span></td>
+                        <td><button class="action-btn">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>Petronas</td>
+                        <td>hr.dept@petronas.com.my</td>
+                        <td>Interactive Booth</td>
+                        <td>05 Nov 2026</td>
+                        <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                        <td><button class="action-btn">View</button></td>
+                    </tr>
+                    <tr>
+                        <td>Sunway Group</td>
+                        <td>admin@sunway.com</td>
+                        <td>Equipment Rental</td>
+                        <td>20 Oct 2026</td>
+                        <td><span class="status-badge status-confirmed">Confirmed</span></td>
+                        <td><button class="action-btn">View</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- CLIENT DATABASE TAB -->
+        <div id="clients" class="admin-section">
+            <div class="section-heading">
+                <h2>Client Database Lookup</h2>
+                <button class="btn btn-primary">Export to Excel</button>
+            </div>
+            <p style="color: var(--color-gray); margin-bottom: 2rem;">Here you will see every user who has ever
+                registered an account to make a booking on your site.</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Company Name</th>
+                        <th>Registered Email</th>
+                        <th>Total Bookings</th>
+                        <th>Join Date</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>#001</td>
+                        <td>GE Aerospace</td>
+                        <td>contact@ge.com</td>
+                        <td>2</td>
+                        <td>14 Aug 2025</td>
+                    </tr>
+                    <tr>
+                        <td>#002</td>
+                        <td>Duopharma Biotech</td>
+                        <td>events@duopharma.com</td>
+                        <td>1</td>
+                        <td>20 Aug 2025</td>
+                    </tr>
+                    <tr>
+                        <td>#003</td>
+                        <td>Kenanga Investment Bank</td>
+                        <td>miba.sports@kenanga.com.my</td>
+                        <td>1</td>
+                        <td>16 Aug 2025</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PRICING & PACKAGES TAB -->
+        <div id="packages" class="admin-section">
+            <div class="section-heading">
+                <h2>Manage Pricing & Packages</h2>
+                <button class="btn btn-primary">+ Add New Package</button>
+            </div>
+            <p style="color: var(--color-gray); margin-bottom: 2rem;">Edit the names, descriptions, and base prices of
+                the services offered on your booking page.</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Package Name</th>
+                        <th>Base Price</th>
+                        <th>Visibility</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Esports Tournament</strong><br><span
+                                style="color:var(--color-gray); font-size:0.8rem;">Full end-to-end management</span>
+                        </td>
+                        <td>RM 5,000</td>
+                        <td><span style="color:#4cd137;">Active</span></td>
+                        <td><button class="action-btn">Edit Details</button></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Interactive Exhibition Booth</strong><br><span
+                                style="color:var(--color-gray); font-size:0.8rem;">VR and Console setups</span></td>
+                        <td>RM 3,500</td>
+                        <td><span style="color:#4cd137;">Active</span></td>
+                        <td><button class="action-btn">Edit Details</button></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Standard Equipment Rental</strong><br><span
+                                style="color:var(--color-gray); font-size:0.8rem;">PS5s, TVs, Controllers</span></td>
+                        <td>RM 1,200</td>
+                        <td><span style="color:#4cd137;">Active</span></td>
+                        <td><button class="action-btn">Edit Details</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- PORTFOLIO PICTURES TAB -->
+        <div id="portfolio" class="admin-section">
+            <div class="section-heading">
+                <h2>Manage Portfolio Gallery</h2>
+                <button class="btn btn-primary">📸 Upload New Event Photos</button>
+            </div>
+            <p style="color: var(--color-gray); margin-bottom: 2rem;">Upload pictures from your latest events here. They
+                will automatically be added to the Events page on your live website.</p>
+
+            <div style="display: flex; flex-direction: column; gap: 1.5rem;">
+                <div
+                    style="background: rgba(0,0,0,0.5); padding: 1.5rem; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.2);">
+                    <h3>Drag and drop images here</h3>
+                    <p style="color: var(--color-gray);">Supports JPG, PNG (Max 5MB per file)</p>
+                </div>
+
+                <h4>Current Events on Display</h4>
+                <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 1rem;">
+                    <!-- Placeholder cards for managing images -->
+                    <div style="background: var(--color-black); padding: 1rem; border-radius: 8px;">
+                        <img src="assets/ge1.jpg"
+                            style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 0.5rem;">
+                        <p style="font-size: 0.9rem;">GE Aerospace Folder</p>
+                        <button class="action-btn"
+                            style="width: 100%; margin-top: 0.5rem; border-color: var(--color-red); color: var(--color-red);">Delete
+                            Gallery</button>
+                    </div>
+                    <div style="background: var(--color-black); padding: 1rem; border-radius: 8px;">
+                        <img src="assets/aeon1.jpg"
+                            style="width: 100%; height: 120px; object-fit: cover; border-radius: 4px; margin-bottom: 0.5rem;">
+                        <p style="font-size: 0.9rem;">Aeon MLBB Folder</p>
+                        <button class="action-btn"
+                            style="width: 100%; margin-top: 0.5rem; border-color: var(--color-red); color: var(--color-red);">Delete
+                            Gallery</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROMOTIONS TAB -->
+        <div id="promotions" class="admin-section">
+            <div class="section-heading">
+                <h2>Active Website Promotions</h2>
+                <button class="btn btn-primary">+ Create Promo Alert</button>
+            </div>
+            <p style="color: var(--color-gray); margin-bottom: 2rem;">Create a promotional banner or popup to appear on
+                the homepage for all visitors.</p>
+
+            <table class="data-table">
+                <thead>
+                    <tr>
+                        <th>Promo Title</th>
+                        <th>Action Details</th>
+                        <th>Expiration Date</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Year-End Corporate Discount</td>
+                        <td>Show Banner: "15% off all Esports Events booked before December!"</td>
+                        <td>31 Nov 2026</td>
+                        <td><span style="color:#f1c40f;">Draft</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <script>
+        // Simple tab switching logic for the admin dashboard UI
+        function switchTab(tabId) {
+            // Remove active classes from all nav items and sections
+            document.querySelectorAll('.admin-nav-item').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.admin-section').forEach(el => el.classList.remove('active'));
+
+            // Add active class to clicked nav item
+            event.currentTarget.classList.add('active');
+
+            // Show the corresponding section
+            document.getElementById(tabId).classList.add('active');
+        }
+    </script>
+</body>
+
+</html>

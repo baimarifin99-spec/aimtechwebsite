@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login | Aim Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .login-page {
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, var(--color-black) 0%, #110000 100%);
+            padding: 2rem;
+        }
+
+        .auth-container {
+            width: 100%;
+            max-width: 450px;
+            background: var(--color-dark);
+            padding: 3rem;
+            border-radius: 12px;
+            border: 1px solid rgba(230, 32, 32, 0.2);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.5);
+            text-align: center;
+        }
+
+        .auth-logo {
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--color-white);
+            margin-bottom: 2rem;
+        }
+
+        .auth-logo .highlight {
+            color: var(--color-red);
+        }
+
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .auth-tab {
+            flex: 1;
+            padding: 1rem;
+            cursor: pointer;
+            color: var(--color-gray);
+            font-weight: 600;
+            transition: var(--transition-fast);
+        }
+
+        .auth-tab.active {
+            color: var(--color-red);
+            border-bottom: 2px solid var(--color-red);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+            text-align: left;
+        }
+
+        .auth-form label {
+            font-size: 0.9rem;
+            color: #ccc;
+            margin-bottom: -0.5rem;
+        }
+
+        .auth-form .form-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 4px;
+        }
+
+        .auth-form .form-input:focus {
+            outline: none;
+            border-color: var(--color-red);
+        }
+
+        .error-message {
+            color: #ff4757;
+            font-size: 0.9rem;
+            margin-top: -10px;
+            display: none;
+        }
+
+        .success-message {
+            background: rgba(76, 209, 55, 0.1);
+            color: #4cd137;
+            padding: 1rem;
+            border: 1px dashed #4cd137;
+            border-radius: 8px;
+            font-size: 0.9rem;
+            margin-bottom: 1.5rem;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="login-page">
+        <div class="auth-container animate-fade-up">
+            <div class="auth-logo">
+                <img src="assets/logo.png" alt="Aim Tech Logon" style="height: 50px;">
+            </div>
+
+            <div class="auth-tabs">
+                <div class="auth-tab active" id="tab-login">Login</div>
+                <div class="auth-tab" id="tab-register">Create Account</div>
+            </div>
+
+            <div id="auth-error" class="error-message"></div>
+            <div id="auth-success" class="success-message">🎉 Account successfully created! Please log in below.</div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form">
+                <label>Email Address</label>
+                <input type="email" id="login-email" class="form-input" required placeholder="Enter your email">
+
+                <label>Password</label>
+                <input type="password" id="login-password" class="form-input" required
+                    placeholder="Enter your password">
+
+                <!-- Remember Me wrapper -->
+                <div style="display: flex; align-items: center; gap: 8px; margin-top: -0.5rem;">
+                    <input type="checkbox" id="remember-me" checked
+                        style="accent-color: var(--color-red); transform: scale(1.2);">
+                    <label for="remember-me"
+                        style="margin-bottom: 0; color: #aaa; cursor: pointer; user-select: none;">Remember me</label>
+                </div>
+
+                <button type="submit" class="btn btn-primary" style="margin-top: 1rem;">Sign In</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form" style="display: none;">
+                <label>Full Name / Company Name</label>
+                <input type="text" id="reg-name" class="form-input" required placeholder="Enter your name">
+
+                <label>Email Address</label>
+                <input type="email" id="reg-email" class="form-input" required placeholder="Enter your email">
+
+                <label>Password</label>
+                <input type="password" id="reg-password" class="form-input" required placeholder="Create a password">
+
+                <button type="submit" class="btn btn-primary" id="btn-create" style="margin-top: 1rem;">Create
+                    Account</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Firebase SDK Setup -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, updateProfile, setPersistence, browserLocalPersistence, browserSessionPersistence } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+        import { getFirestore, doc, setDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA411eaPkIqY4IU3YQbGInMEZZua_rH_wY",
+            authDomain: "aimtech-e2600.firebaseapp.com",
+            projectId: "aimtech-e2600",
+            storageBucket: "aimtech-e2600.firebasestorage.app",
+            messagingSenderId: "152364361412",
+            appId: "1:152364361412:web:86ac0ac48a8df54d33cb91"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // UI Tabs Logic
+        const tabLogin = document.getElementById('tab-login');
+        const tabRegister = document.getElementById('tab-register');
+        const formLogin = document.getElementById('login-form');
+        const formRegister = document.getElementById('register-form');
+        const errorDiv = document.getElementById('auth-error');
+        const successDiv = document.getElementById('auth-success');
+
+        function switchTabToLogin() {
+            tabLogin.classList.add('active');
+            tabRegister.classList.remove('active');
+            formLogin.style.display = 'flex';
+            formRegister.style.display = 'none';
+            errorDiv.style.display = 'none';
+        }
+
+        tabLogin.addEventListener('click', () => {
+            switchTabToLogin();
+            successDiv.style.display = 'none';
+        });
+
+        tabRegister.addEventListener('click', () => {
+            tabRegister.classList.add('active');
+            tabLogin.classList.remove('active');
+            formRegister.style.display = 'flex';
+            formLogin.style.display = 'none';
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+        });
+
+        function showError(msg) {
+            errorDiv.textContent = msg;
+            errorDiv.style.display = 'block';
+            successDiv.style.display = 'none';
+        }
+
+        // --- REGISTER USER ---
+        formRegister.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('reg-email').value;
+            const password = document.getElementById('reg-password').value;
+            const name = document.getElementById('reg-name').value;
+            const btn = document.getElementById('btn-create');
+
+            errorDiv.style.display = 'none';
+            btn.textContent = "Creating...";
+            btn.disabled = true;
+
+            try {
+                // 1. Create User in Firebase Auth
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                const user = userCredential.user;
+
+                // 2. Add Display Name
+                await updateProfile(user, { displayName: name });
+
+                // 3. Save User Details securely to Firestore Database
+                await setDoc(doc(db, "users", user.uid), {
+                    displayName: name,
+                    email: email,
+                    role: "client",
+                    joinedAt: serverTimestamp()
+                });
+
+                // 4. Success -> show message, auto fill login, and switch tab
+                document.getElementById('login-email').value = email;
+                document.getElementById('login-password').value = password; // Helpfully auto fill password for instant login
+                document.getElementById('reg-password').value = '';
+
+                successDiv.style.display = 'block';
+                switchTabToLogin();
+
+            } catch (error) {
+                console.error(error);
+                let msg = "Failed to register. Please try again.";
+                if (error.code === 'auth/email-already-in-use') msg = "That email is already registered. Please login.";
+                if (error.code === 'auth/weak-password') msg = "Password should be at least 6 characters.";
+                showError(msg);
+            } finally {
+                btn.textContent = "Create Account";
+                btn.disabled = false;
+            }
+        });
+
+        // --- LOGIN USER ---
+        formLogin.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            const rememberMe = document.getElementById('remember-me').checked;
+
+            try {
+                // Set persistence based on "Remember Me"
+                const persistenceType = rememberMe ? browserLocalPersistence : browserSessionPersistence;
+                await setPersistence(auth, persistenceType);
+
+                // Sign in
+                await signInWithEmailAndPassword(auth, email, password);
+
+                // Redirect immediately on success
+                window.location.href = 'booking.html';
+            } catch (error) {
+                console.error(error);
+                showError("Invalid email or password. Please try again.");
+            }
+        });
+    </script>
+</body>
+
+</html>

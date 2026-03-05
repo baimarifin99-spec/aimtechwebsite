@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Past Events | Aim Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .events-page {
+            background: linear-gradient(135deg, var(--color-black) 0%, #0a0505 100%);
+            min-height: 100vh;
+            padding: 100px 0 50px;
+        }
+
+        .event-record {
+            background: var(--color-dark);
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            margin-bottom: 3rem;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transition: var(--transition-normal);
+        }
+
+        .event-record:hover {
+            border-color: rgba(230, 32, 32, 0.3);
+            transform: translateY(-5px);
+        }
+
+        .event-img {
+            width: 100%;
+            height: 350px;
+            object-fit: cover;
+            border-bottom: 1px solid rgba(230, 32, 32, 0.2);
+        }
+
+        .event-body {
+            padding: 2rem;
+        }
+
+        .event-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 2rem;
+        }
+
+        .event-meta {
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            padding-right: 2rem;
+        }
+
+        .event-meta h3 {
+            color: var(--color-red);
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .event-meta p {
+            color: #ccc;
+            margin-bottom: 0.5rem;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .event-desc h4 {
+            color: white;
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+        }
+
+        .event-desc p {
+            color: var(--color-gray);
+            line-height: 1.7;
+        }
+
+        @media (max-width: 768px) {
+            .event-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .event-meta {
+                border-right: none;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+                padding-right: 0;
+                padding-bottom: 1.5rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="navbar" style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Aim Tech Logo" class="logo-img">
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="#" class="nav-link" style="color: var(--color-red);">Past Events</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="events-page">
+        <div class="container animate-fade-up">
+            <div class="section-header text-center">
+                <h2>Our <span class="highlight">Portfolio</span></h2>
+                <p class="section-subtitle">Exhibitions, Tournaments and Team Events we've successfully managed across
+                    Malaysia.</p>
+            </div>
+
+            <!-- Event 1 (UDA) -->
+            <div class="event-record animate-fade-up delay-1">
+                <img src="assets/about-us.jpg" alt="UDA Karnival Event" class="event-img">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>UDA Holdings Berhad</h3>
+                            <p>📍 Karnival UDA (Mall Atrium)</p>
+                            <p>🎮 Mobile Legends (MLBB) Tournament</p>
+                            <p>📅 October 2026</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Major Esports Activation</h4>
+                            <p>We successfully hosted and executed a full-scale Mobile Legends Tournament right in the
+                                center of the mall atrium. This major esports activation for Karnival UDA drew massive
+                                crowds, engaged the youth demographic seamlessly, and ran through rigorous stages from
+                                qualifiers to the grand finals without any technical hitches.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 2 (GE Aerospace) -->
+            <div class="event-record animate-fade-up delay-2">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4px; border-bottom: 1px solid rgba(230, 32, 32, 0.2);">
+                    <img src="assets/ge1.jpg" alt="GE Event 1" style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/ge2.jpg" alt="GE Event 2" style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/ge3.jpg" alt="GE Event 3" style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/ge4.jpg" alt="GE Event 4" style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/ge5.jpg" alt="GE Event 5" style="width: 100%; height: 250px; object-fit: cover;">
+                </div>
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>GE Aerospace</h3>
+                            <p>📍 Corporate Office</p>
+                            <p style="align-items: flex-start;">🎮 Mobile Legends Tournament, FC26, GT7, & Tekken 8</p>
+                            <p>📅 September 2026</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Corporate Team Engagement Activities</h4>
+                            <p>Aim Tech provided an array of gaming equipment tailored for GE Aerospace's internal
+                                employee appreciation day. This massive deployment seamlessly combined competitive
+                                tournaments alongside casual free-play, offering staff a premium stress-relief
+                                experience that boosted team morale.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 3 (Aeon Taman Maluri MLBB) -->
+            <div class="event-record animate-fade-up">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4px; border-bottom: 1px solid rgba(230, 32, 32, 0.2);">
+                    <img src="assets/aeon1.jpg" alt="Aeon Event 1"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/aeon2.jpg" alt="Aeon Event 2"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/aeon3.jpg" alt="Aeon Event 3"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/aeon4.jpg" alt="Aeon Event 4"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/aeon5.jpg" alt="Aeon Event 5"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                </div>
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>Aeon Taman Maluri</h3>
+                            <p>📍 Aeon Taman Maluri Shopping Centre</p>
+                            <p style="align-items: flex-start;">🎮 Tournament MLBB Open To Public</p>
+                            <p>📅 15 February 2026</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Public Esports Engagement</h4>
+                            <p>Transformed the mall's concourse into an electrifying esports arena open to the public.
+                                Delivering professional-grade streaming, high-speed mobile connectivity setups, and
+                                dynamic stage hosting, we offered an inclusive environment where local talent and
+                                enthusiasts could compete seamlessly.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 4 (Aeon Taman Maluri FC26) -->
+            <div class="event-record animate-fade-up">
+                <div
+                    style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 4px; border-bottom: 1px solid rgba(230, 32, 32, 0.2);">
+                    <img src="assets/aeon_fc1.jpg" alt="Aeon FC Event 1"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/aeon_fc2.jpg" alt="Aeon FC Event 2"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/aeon_fc3.jpg" alt="Aeon FC Event 3"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/aeon_fc4.jpg" alt="Aeon FC Event 4"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                    <img src="assets/aeon_fc5.jpg" alt="Aeon FC Event 5"
+                        style="width: 100%; height: 250px; object-fit: cover;">
+                </div>
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>Aeon Taman Maluri</h3>
+                            <p>📍 Aeon Taman Maluri Shopping Centre</p>
+                            <p style="align-items: flex-start;">🎮 Tournament FC26 Open to Public</p>
+                            <p>📅 25 January 2026</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Interactive Console Tournaments</h4>
+                            <p>A dedicated high-end console tournament for FC26 enthusiasts, providing customized PS5
+                                setups and zero-latency displays. We managed the bracket progression from registration
+                                to the finals, ensuring a seamless competitive experience that captivated shopping
+                                crowds.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 5 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>SD Guthrie International Langat Refinery</h3>
+                            <p>📍 Telok Panglima Garang</p>
+                            <p style="align-items: flex-start;">🎮 Fun Play for staff (PS5 Set, Racing Simulator,
+                                Nintendo)</p>
+                            <p>📅 11 December 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Industrial Staff Welfare Program</h4>
+                            <p>Brought premium gaming experiences directly to the industrial facility. Through
+                                strategically placed Racing Simulators and versatile co-op console pods (PS5 &
+                                Nintendo), we provided refinery staff with engaging out-of-office recreational
+                                activities integrated perfectly into their premises.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 6 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>Jabatan Kebajikan Masyarakat</h3>
+                            <p>📍 Club 360 Ecohill Semenyih</p>
+                            <p style="align-items: flex-start;">🎮 Hari Kanak-Kanak Peringkat Negeri Selangor (4 Set
+                                PS5)</p>
+                            <p>📅 29 November 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>State-Level Youth Celebration</h4>
+                            <p>Partnered with local authorities to deliver an engaging, child-friendly entertainment
+                                zone for the state's Children's Day celebration. Provided 4 bespoke PS5 sets optimized
+                                with family-friendly titles to ensure a safe, fun, and memorable interactive experience
+                                for all young attendees.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 7 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>SD Guthrie International</h3>
+                            <p>📍 Ara Damansara</p>
+                            <p style="align-items: flex-start;">🎮 Fun Play for staff (PS5, Racing Sim, Nintendo)</p>
+                            <p>📅 26-27 November 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Multi-Day Corporate Retreat</h4>
+                            <p>Facilitated a comprehensive two-day recreational event incorporating specialized gaming
+                                hardware. By installing full Racing Simulators alongside Nintendo and PS5 stations, we
+                                delivered an elevated team-building environment designed to maximize employee
+                                interaction and relaxation.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 8 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>USAS</h3>
+                            <p>📍 Dewan Jubli Perak Kuala Kangsar</p>
+                            <p style="align-items: flex-start;">🎮 Exhibition Karnival Stem (2 VR, 2 PS5, 2 Nintendo)
+                            </p>
+                            <p>📅 23 November 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>STEM Exhibition Technology Showcase</h4>
+                            <p>At this educational exhibition, Aim Tech showcased the intersection of modern technology
+                                and interactive entertainment. With highly sought-after Virtual Reality (VR) immersions
+                                alongside latest-generation consoles, we helped bridge the gap between STEM education
+                                and gamified learning.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 9 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>Mekanikos (UDA Karnival)</h3>
+                            <p>📍 Angsana Ipoh Mall</p>
+                            <p style="align-items: flex-start;">🎮 Tournament MLBB Karnival UDA</p>
+                            <p>📅 12 October 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Mall Activation Esports Tournament</h4>
+                            <p>Delivered a structured Mobile Legends bracket customized for the Mekanikos community at
+                                the Karnival UDA. Handled comprehensive end-to-end administration including network
+                                stability, player management, and stage logistics to guarantee an exciting spectator
+                                environment.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 10 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>Pharma Sport</h3>
+                            <p>📍 Pusat Sukan UPM</p>
+                            <p style="align-items: flex-start;">🎮 Tournament FC25 (6 set PS5)</p>
+                            <p>📅 4 October 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>University Level Sports Integration</h4>
+                            <p>Provided 6 specialized PS5 console stations at Pusat Sukan UPM for the Pharma Sport
+                                event. We bridged physical and digital sports by seamlessly managing an FC25 digital
+                                tournament in tandem with their physical sports agenda, maintaining constant uptime and
+                                robust bracket management.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 11 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>Duopharma Biotech Berhad</h3>
+                            <p>📍 DuoPharma Biotech Klang</p>
+                            <p style="align-items: flex-start;">🎮 Tournament MLBB, Tournament GT7</p>
+                            <p>📅 23 August 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Multi-Title Corporate Tournament</h4>
+                            <p>Executed dual consecutive tournaments featuring Gran Turismo 7 and Mobile Legends for
+                                Duopharma Biotech. Supported the company's internal engagement goals with elite racing
+                                rigs and mobile optimization, managing live scoreboards to elevate the competitive
+                                atmosphere.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 12 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>Kenanga Investment Bank</h3>
+                            <p>📍 Donnis Sport, Bandar Sunway</p>
+                            <p style="align-items: flex-start;">🎮 Tournament FC25 (12 set PS5) (MIBA)</p>
+                            <p>📅 16 August 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Large-Scale Financial Sector Cup</h4>
+                            <p>Deployed and maintained an expansive 12-set PS5 network for the MIBA inter-bank cup.
+                                Managed the complex logistics of networking multiple consoles to deliver an intense,
+                                flawless FC25 competitive environment perfectly suited for high-profile financial
+                                professionals.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 13 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>CIMB</h3>
+                            <p>📍 Quill City Mall</p>
+                            <p style="align-items: flex-start;">🎮 Tournament MLBB (MIBA)</p>
+                            <p>📅 21 June 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>MIBA Mobile Esports Branch</h4>
+                            <p>Organized the mobile division of the MIBA financial sector tournament on behalf of CIMB.
+                                By implementing a high-end mobile connectivity infrastructure in a busy mall
+                                environment, we successfully hosted a professional MLBB corporate showdown devoid of
+                                interference.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Event 14 -->
+            <div class="event-record animate-fade-up">
+                <div class="event-body">
+                    <div class="event-grid">
+                        <div class="event-meta">
+                            <h3>MPAJ</h3>
+                            <p>📍 Padang Perbandaran MPAJ</p>
+                            <p style="align-items: flex-start;">🎮 Tournament FC25 (4 Set PS5)</p>
+                            <p>📅 25 May 2025</p>
+                        </div>
+                        <div class="event-desc">
+                            <h4>Outdoor Community Engagement</h4>
+                            <p>Successfully adapted our console setups for an open-air municipal environment. Executed
+                                an FC25 tournament for the local council, employing specialized glare-resistant displays
+                                and robust power solutions to bring premium esports directly to the community field.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</body>
+
+</html>

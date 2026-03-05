@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking Portal | Aim Tech</title>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/style.css">
+    <style>
+        .booking-page {
+            background: linear-gradient(135deg, var(--color-black) 0%, #0a0505 100%);
+            min-height: 100vh;
+            padding: 80px 0 50px;
+        }
+
+        .booking-header {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .booking-card {
+            background: var(--color-dark);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-top: 3px solid var(--color-red);
+            border-radius: 8px;
+            padding: 2rem;
+            margin-bottom: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .package-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .package-box {
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            padding: 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+        }
+
+        .package-box:hover {
+            border-color: rgba(230, 32, 32, 0.5);
+        }
+
+        .package-box.selected {
+            border-color: var(--color-red);
+            background: rgba(230, 32, 32, 0.1);
+        }
+
+        .package-checkbox {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            transform: scale(1.5);
+            accent-color: var(--color-red);
+        }
+
+        /* Sub package stylings */
+        .sub-package-section {
+            background: rgba(0, 0, 0, 0.2);
+            padding: 1.5rem;
+            border-radius: 8px;
+            border: 1px dashed rgba(230, 32, 32, 0.3);
+            margin-top: 1.5rem;
+        }
+
+        .sub-category {
+            margin-bottom: 1.5rem;
+        }
+
+        .sub-category h5 {
+            color: var(--color-red);
+            font-size: 1.1rem;
+            margin-bottom: 0.8rem;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            padding-bottom: 0.3rem;
+        }
+
+        .sub-option {
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            margin-bottom: 0.8rem;
+            cursor: pointer;
+            color: white;
+            font-weight: 600;
+        }
+
+        .sub-option input {
+            margin-top: 0.3rem;
+            accent-color: var(--color-red);
+        }
+
+        .sub-desc {
+            display: block;
+            color: #9aa0a6;
+            font-size: 0.85rem;
+            font-weight: 400;
+            margin-top: 0.2rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            color: #ccc;
+            font-size: 0.95rem;
+            font-weight: 600;
+        }
+
+        .booking-input {
+            width: 100%;
+            padding: 1rem;
+            background: rgba(0, 0, 0, 0.5);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            color: white;
+            border-radius: 4px;
+            font-family: inherit;
+        }
+
+        .booking-input:focus {
+            outline: none;
+            border-color: var(--color-red);
+        }
+
+        /* QTY Box Highlight Styles */
+        .qty-container {
+            background: rgba(230, 32, 32, 0.15);
+            padding: 6px 12px;
+            border-radius: 8px;
+            border: 1px dashed var(--color-red);
+            animation: jumpIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards, pulse-qty 2s infinite 1s;
+            transform-origin: right center;
+        }
+
+        .qty-input {
+            width: 65px;
+            background: rgba(0, 0, 0, 0.8);
+            border: 2px solid var(--color-red);
+            color: white;
+            padding: 0.3rem 0.5rem;
+            border-radius: 4px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            outline: none;
+        }
+
+        .qty-input:focus {
+            box-shadow: 0 0 10px rgba(230, 32, 32, 0.8);
+        }
+
+        @keyframes jumpIn {
+            0% {
+                opacity: 0;
+                transform: scale(0.5);
+            }
+
+            100% {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+
+        @keyframes pulse-qty {
+            0% {
+                box-shadow: 0 0 0 0 rgba(230, 32, 32, 0.6);
+            }
+
+            70% {
+                box-shadow: 0 0 0 12px rgba(230, 32, 32, 0);
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(230, 32, 32, 0);
+            }
+        }
+
+        @media (max-width: 768px) {
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <header class="navbar" style="box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);">
+        <div class="container nav-container">
+            <a href="index.html" class="logo">
+                <img src="assets/logo.png" alt="Aim Tech Logo" class="logo-img">
+            </a>
+            <nav class="nav-links">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="#" class="nav-link" style="color: var(--color-red);">Booking Portal</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="booking-page">
+        <div class="container animate-fade-up">
+            <div class="booking-header">
+                <h2>Create Your <span class="highlight">Event Package</span></h2>
+                <p>Select the services you need and finalize your booking via WhatsApp.</p>
+            </div>
+
+            <form id="bookingForm">
+                <!-- Package Selection -->
+                <div class="booking-card">
+                    <h3 style="margin-bottom: 1.5rem;">1. Select Packages</h3>
+                    <div class="package-options">
+                        <label class="package-box">
+                            <input type="checkbox" name="package" value="Esports Tournament" class="package-checkbox"
+                                id="chk-tournament">
+                            <h4 style="color: var(--color-red); margin-bottom: 0.5rem;">Esports Tournament</h4>
+                            <p style="font-size: 0.9rem; color: #ccc;">Full competitive bracket management, marshalling,
+                                and setup.</p>
+                        </label>
+
+                        <label class="package-box">
+                            <input type="checkbox" name="package" value="Esports Exhibition" class="package-checkbox"
+                                id="chk-exhibition">
+                            <h4 style="color: var(--color-red); margin-bottom: 0.5rem;">Esports Exhibition</h4>
+                            <p style="font-size: 0.9rem; color: #ccc;">Casual free-play setups designed to engage crowds
+                                and attendees.</p>
+                        </label>
+
+                        <label class="package-box">
+                            <input type="checkbox" name="package" value="Equipment Rental" class="package-checkbox">
+                            <h4 style="color: var(--color-red); margin-bottom: 0.5rem;">Equipment Rental</h4>
+                            <p style="font-size: 0.9rem; color: #ccc;">Rent hardware only. Pricing provided based on
+                                console/rig count.</p>
+                        </label>
+                    </div>
+
+                    <!-- Dynamic Tournament Sub-packaging -->
+                    <div id="sub-tournament" class="sub-package-section" style="display: none;">
+                        <h4 style="margin-bottom: 1.5rem; color: white; font-size: 1.2rem;">🏆 Esports Tournament
+                            Options</h4>
+
+                        <div class="sub-category">
+                            <h5>FC26</h5>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="FC26 Silver">
+                                <div>Silver Package - RM 2,800 <span class="sub-desc">4x PlayStation Set with TV 32"
+                                        (can Add On), Marshall, Handle Tournament, Tournament Schedule,
+                                        Registration</span></div>
+                            </label>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="FC26 Gold">
+                                <div>Gold Package - RM 4,000 <span class="sub-desc">4x PlayStation Set with TV 32" (can
+                                        Add On), Pricepool, Mockup Cheque, Trophy / Medal, Poster, Banner Collaboration,
+                                        Promote and find participants, Marshall, Handle Tournament, Registration</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="sub-category">
+                            <h5>Mobile Legends (MLBB)</h5>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="MLBB Amateur">
+                                <div>Amateur League - RM 2,500 <span class="sub-desc">Marshall, Handle Tournament,
+                                        Tournament Schedule, Wifi, Max 12 Team, 1 Day Event</span></div>
+                            </label>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="MLBB Semi-Pro">
+                                <div>Semi-Pro League - RM 3,500 <span class="sub-desc">Marshall, Handle Tournament,
+                                        Tournament Double Eliminations, Wifi, 2x TV40" Display with Stand / Projector,
+                                        Poster / Banner, Registration, Mockup Cheque, Trophy & Medal, Max 24 Team, 1 Day
+                                        Event</span></div>
+                            </label>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="MLBB Pro">
+                                <div>Professional League - RM 8,000 <span class="sub-desc">Marshall, Handle Tournament,
+                                        Tournament League & Double Eliminations, Wifi, LED Screen, Poster & Banner,
+                                        Registration, Mockup Cheque, Trophy & Medal, Max 48 Team, Cover For 2 day Event,
+                                        Table & Chair, Caster</span></div>
+                            </label>
+                        </div>
+
+                        <div class="sub-category">
+                            <h5>Gran Turismo 7</h5>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="GT7 Package 1">
+                                <div>Package 1 - RM 2,400 <span class="sub-desc">2 set Racing Simulator, Marshall,
+                                        Handle Tournament, Tournament Schedule, Wifi, Registration</span></div>
+                            </label>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="GT7 Package 2">
+                                <div>Package 2 - RM 3,600 <span class="sub-desc">Mockup Cheque, Trophy / Medal, Poster,
+                                        Banner Collaboration, 2 set Racing Simulator, Marshall, Handle Tournament,
+                                        Tournament Schedule, Wifi, Registration</span></div>
+                            </label>
+                        </div>
+
+                        <div class="sub-category">
+                            <h5>Tekken 8</h5>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="Tekken 8 Silver">
+                                <div>Silver Package - RM 2,800 <span class="sub-desc">4x PlayStation Set with TV 32"
+                                        (can Add On), Marshall, Handle Tournament, Tournament Schedule,
+                                        Registration</span></div>
+                            </label>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="Tekken 8 Gold">
+                                <div>Gold Package - RM 4,000 <span class="sub-desc">4x PlayStation Set with TV 32" (can
+                                        Add On), Pricepool, Mockup Cheque, Trophy / Medal, Poster, Banner Collaboration,
+                                        Promote and find participants, Marshall, Handle Tournament, Registration</span>
+                                </div>
+                            </label>
+                        </div>
+
+                        <div class="sub-category">
+                            <h5>eFootball</h5>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="eFootball Amateur">
+                                <div>Amateur League - RM 1,800 <span class="sub-desc">Marshall, Handle Tournament,
+                                        Tournament Schedule, Wifi, Max 12 Team, 1 Day Event</span></div>
+                            </label>
+                            <label class="sub-option">
+                                <input type="checkbox" name="sub-package" value="eFootball Semi-Pro">
+                                <div>Semi-Pro League - RM 2,800 <span class="sub-desc">Marshall, Handle Tournament,
+                                        Tournament Double Eliminations, Wifi, 2x TV40" Display with Stand / Projector,
+                                        Poster / Banner, Registration, Mockup Cheque, Trophy & Medal, Max 24 Team, 1 Day
+                                        Event</span></div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Dynamic Exhibition Sub-packaging -->
+                    <div id="sub-exhibition" class="sub-package-section" style="display: none;">
+                        <h4 style="margin-bottom: 1.5rem; color: white; font-size: 1.2rem;">🎮 Esports Exhibition
+                            Options</h4>
+
+                        <div class="sub-category">
+                            <label class="sub-option"
+                                style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="checkbox" name="exhibition-item" value="PS5" class="exh-check">
+                                    <div>PS5 - RM 500 <span class="sub-desc">PS5, 2 controller, 1 Game, 1 TV 32"</span>
+                                    </div>
+                                </div>
+                                <div class="qty-container" style="display: none; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.9rem; font-weight: bold; color: white;">QTY:</span>
+                                    <input type="number" min="1" value="1" class="qty-input">
+                                </div>
+                            </label>
+
+                            <label class="sub-option"
+                                style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="checkbox" name="exhibition-item" value="Racing Simulator"
+                                        class="exh-check">
+                                    <div>Racing Simulator - RM 800 <span class="sub-desc">PS5, TV 40", Racing Rig</span>
+                                    </div>
+                                </div>
+                                <div class="qty-container" style="display: none; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.9rem; font-weight: bold; color: white;">QTY:</span>
+                                    <input type="number" min="1" value="1" class="qty-input">
+                                </div>
+                            </label>
+
+                            <label class="sub-option"
+                                style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="checkbox" name="exhibition-item" value="VR" class="exh-check">
+                                    <div>Virtual Reality (VR) - RM 750 <span class="sub-desc">VR, TV 32"</span></div>
+                                </div>
+                                <div class="qty-container" style="display: none; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.9rem; font-weight: bold; color: white;">QTY:</span>
+                                    <input type="number" min="1" value="1" class="qty-input">
+                                </div>
+                            </label>
+
+                            <label class="sub-option"
+                                style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="checkbox" name="exhibition-item" value="Nintendo Switch"
+                                        class="exh-check">
+                                    <div>Nintendo Switch - RM 450 <span class="sub-desc">Nintendo, 4 joycon, TV
+                                            32"</span></div>
+                                </div>
+                                <div class="qty-container" style="display: none; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.9rem; font-weight: bold; color: white;">QTY:</span>
+                                    <input type="number" min="1" value="1" class="qty-input">
+                                </div>
+                            </label>
+
+                            <label class="sub-option"
+                                style="display: flex; justify-content: space-between; align-items: flex-start; width: 100%;">
+                                <div style="display: flex; gap: 10px;">
+                                    <input type="checkbox" name="exhibition-item" value="Arcade Fighting Stick"
+                                        class="exh-check">
+                                    <div>Arcade Fighting Stick - RM 650 <span class="sub-desc">PS5, Arcade fighting
+                                            Stick, suitable for Tekken 8, Dragon ball, naruto, KOF, Street
+                                            Fighter</span></div>
+                                </div>
+                                <div class="qty-container" style="display: none; align-items: center; gap: 8px;">
+                                    <span style="font-size: 0.9rem; font-weight: bold; color: white;">QTY:</span>
+                                    <input type="number" min="1" value="1" class="qty-input">
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                </div>
+
+                <!-- Event Details -->
+                <div class="booking-card">
+                    <h3 style="margin-bottom: 1.5rem;">2. Event Details</h3>
+
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Company Name</label>
+                            <input type="text" id="company" class="booking-input" required
+                                placeholder="e.g. Aim Tech Sdn Bhd">
+                        </div>
+                        <div class="form-group">
+                            <label>Email Address</label>
+                            <input type="email" id="email" class="booking-input" required
+                                placeholder="name@company.com">
+                        </div>
+                        <div class="form-group">
+                            <label>Event Date(s)</label>
+                            <input type="text" id="date" class="booking-input" required
+                                placeholder="e.g. 15-16 October 2026">
+                        </div>
+                        <div class="form-group">
+                            <label>Event Location</label>
+                            <input type="text" id="location" class="booking-input" required
+                                placeholder="e.g. KLCC Convention Centre">
+                        </div>
+                    </div>
+
+                    <div style="text-align: right; margin-top: 1rem;">
+                        <button type="submit" class="btn btn-primary" style="padding: 1rem 3rem; font-size: 1.1rem;">
+                            Submit Booking via WhatsApp
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script type="module">
+        // Checkbox stylings map and conditional display logic
+        const checkboxes = document.querySelectorAll('.package-checkbox');
+        const chkTournament = document.getElementById('chk-tournament');
+        const chkExhibition = document.getElementById('chk-exhibition');
+
+        const subTournament = document.getElementById('sub-tournament');
+        const subExhibition = document.getElementById('sub-exhibition');
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', function () {
+                if (this.checked) {
+                    this.parentElement.classList.add('selected');
+                } else {
+                    this.parentElement.classList.remove('selected');
+                }
+
+                // Toggle sub sections based on main package selection
+                if (chkTournament.checked) {
+                    subTournament.style.display = 'block';
+                } else {
+                    subTournament.style.display = 'none';
+                    // clear sub checkboxes
+                    document.querySelectorAll('#sub-tournament input[type="checkbox"]').forEach(c => c.checked = false);
+                }
+
+                if (chkExhibition.checked) {
+                    subExhibition.style.display = 'block';
+                } else {
+                    subExhibition.style.display = 'none';
+                    // clear sub checkboxes
+                    document.querySelectorAll('#sub-exhibition input[type="checkbox"]').forEach(c => c.checked = false);
+                }
+            });
+        });
+
+        // Quantity Box Display Logic
+        // Whenever an exhibition item is checked, show the quantity container
+        document.querySelectorAll('.exh-check').forEach(cb => {
+            cb.addEventListener('change', function () {
+                const qtyBox = this.closest('.sub-option').querySelector('.qty-container');
+                if (this.checked) {
+                    qtyBox.style.display = 'flex';
+                } else {
+                    qtyBox.style.display = 'none';
+                }
+            });
+        });
+
+        // Form Submission Logic
+        document.getElementById('bookingForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Get selected main packages
+            const selectedPkgs = Array.from(document.querySelectorAll('input[name="package"]:checked')).map(cb => cb.value);
+
+            if (selectedPkgs.length === 0) {
+                alert("Please select at least one main package.");
+                return;
+            }
+
+            // Get selected sub packages
+            const selectedSubPkgs = Array.from(document.querySelectorAll('input[name="sub-package"]:checked')).map(cb => cb.value);
+
+            // Get selected exhibitions with quantities
+            const selectedExhibitions = [];
+            document.querySelectorAll('.exh-check:checked').forEach(cb => {
+                const itemName = cb.value;
+                const qtyStr = cb.closest('.sub-option').querySelector('.qty-input').value;
+                const qty = parseInt(qtyStr) || 1;
+                // e.g. "PS5 (QTY: 2)" or just "PS5" if you prefer just "Exhibition PS5" like in picture. 
+                // Let's add the quantity if > 1 to be helpful, or use what was used before
+                selectedExhibitions.push(`Exhibition ${itemName}` + (qty > 1 ? ` (Qty: ${qty})` : ''));
+            });
+
+            // Combine both tiers and exhibitions
+            const combinedOptions = [...selectedSubPkgs, ...selectedExhibitions];
+
+            let packageStr = selectedPkgs.join(', ');
+            if (combinedOptions.length > 0) {
+                packageStr += "\nSelected Tiers/Options: " + combinedOptions.join(', ');
+            }
+
+            const email = document.getElementById('email').value;
+            const company = document.getElementById('company').value;
+            const date = document.getElementById('date').value;
+            const location = document.getElementById('location').value;
+
+            // Construct Whatsapp message following exact format requested
+            const message = `New Booking Request
+
+*Company:* ${company}
+*Email:* ${email}
+*Date:* ${date}
+*Location:* ${location}
+
+*Package Selected:*
+${packageStr}`;
+
+            const phoneUrl = "https://wa.me/601140504700?text=" + encodeURIComponent(message);
+            window.location.href = phoneUrl;
+        });
+
+        // Firebase Auth State Listener to protect this page
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+        import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-auth.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA411eaPkIqY4IU3YQbGInMEZZua_rH_wY",
+            authDomain: "aimtech-e2600.firebaseapp.com",
+            projectId: "aimtech-e2600",
+            storageBucket: "aimtech-e2600.firebasestorage.app",
+            messagingSenderId: "152364361412",
+            appId: "1:152364361412:web:86ac0ac48a8df54d33cb91"
+        };
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Security check
+        onAuthStateChanged(auth, (user) => {
+            if (!user) {
+                // User is not logged in, redirect them back to the login page immediately
+                window.location.replace("login.html");
+            } else {
+                // Optionally pre-fill some fields with existing user data here if desired
+            }
+        });
+    </script>
+</body>
+
+</html>
